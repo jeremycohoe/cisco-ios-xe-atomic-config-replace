@@ -1,0 +1,482 @@
+<config-ios-cli-trans xmlns ="http://cisco.com/ns/yang/Cisco-IOS-XE-cli-rpc">
+ <clis>
+  version 17.15
+memory free low-watermark processor 130582
+service internal
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service call-home
+no service dhcp
+no service tcp-small-servers
+no service udp-small-servers
+hostname jcohoe-c9300x-border1-acr-day1
+control-plane
+ service-policy input system-cpp-policy
+!
+clock summer-time PDST recurring
+clock timezone pacific -8 0
+login on-success log
+vtp mode server
+no errdisable detect cause loopdetect
+license boot level network-advantage addon dna-advantage
+license smart transport Off
+transceiver type all
+ monitoring
+!
+iox
+boot system switch all flash:packages.conf
+boot enable-break switch 1
+call-home
+ contact-email-addr sch-smart-licensing@cisco.com
+ profile CiscoTAC-1
+  active
+  destination transport-method http
+ !
+!
+username admin privilege 15 secret 9 <PUT THE STRING IN HERE!>
+username ro password 0 <PUT THE STRING IN HERE!>
+vrf definition Mgmt-vrf
+ address-family ipv4
+  exit-address-family
+ !
+ address-family ipv6
+  exit-address-family
+ !
+!
+no ip finger
+no ip rcmd rcp-enable
+no ip rcmd rsh-enable
+ip forward-protocol nd
+no ip forward-protocol udp
+no ip ftp passive
+ip scp server enable
+ip tcp RST-count 10 RST-window 5000
+ip tftp source-interface Vlan311
+ip route 0.0.0.0 0.0.0.0 10.85.134.126
+ip ssh source-interface Vlan311
+ip ssh bulk-mode 131072
+ip http server
+ip http secure-server
+ip http client source-interface Vlan311
+ip http active-session-modules none
+ip http secure-active-session-modules none
+ip http authentication local
+no ip nbar classification dns classify-by-domain
+no ip rsvp signalling rate-limit
+vlan 10,311
+exit
+vlan 101
+ name UNDERLAY
+exit
+!
+class-map match-any system-cpp-police-ewlc-control
+ description EWLC Control
+class-map match-any system-cpp-police-topology-control
+ description Topology control
+class-map match-any system-cpp-police-sw-forward
+ description Sw forwarding, L2 LVX data packets, LOGGING, Transit Traffic
+class-map match-any system-cpp-default
+ description EWLC Data, Inter FED Traffic
+class-map match-any system-cpp-police-sys-data
+ description Openflow, Exception, EGR Exception, NFL Sampled Data, RPF Failed
+class-map match-any system-cpp-police-punt-webauth
+ description Punt Webauth
+class-map match-any system-cpp-police-l2lvx-control
+ description L2 LVX control packets
+class-map match-any system-cpp-police-forus
+ description Forus traffic
+class-map match-any system-cpp-police-multicast-end-station
+ description MCAST END STATION
+class-map match-any system-cpp-police-forus-addr-resolution
+ description Forus Address resolution
+class-map match-any system-cpp-police-high-rate-app
+ description High Rate Applications
+class-map match-any system-cpp-police-multicast
+ description MCAST Data
+class-map match-any system-cpp-police-meraki-next-tunnel
+ description Meraki Next tunnel
+class-map match-any system-cpp-police-l2-control
+ description L2 control
+class-map match-any system-cpp-police-dot1x-auth
+ description DOT1X Auth
+class-map match-any system-cpp-police-data
+ description ICMP redirect, ICMP_GEN and BROADCAST
+class-map match-any system-cpp-police-stackwise-virt-control
+ description Stackwise Virtual OOB
+class-map match-any non-client-nrt-class
+class-map match-any system-cpp-police-routing-control
+ description Routing control and Low Latency
+class-map match-any system-cpp-police-protocol-snooping
+ description Protocol snooping
+class-map match-any system-cpp-police-dhcp-snooping
+ description DHCP snooping
+class-map match-any system-cpp-police-ios-routing
+ description L2 control, Topology control, Routing control, Low Latency
+class-map match-any system-cpp-police-system-critical
+ description System Critical and Gold Pkt
+class-map match-any system-cpp-police-ios-feature
+ description ICMPGEN,BROADCAST,ICMP,L2LVXCntrl,ProtoSnoop,PuntWebauth,MCASTData,Transit,DOT1XAuth,Swfwd,LOGGING,L2LVXData,ForusTraffic,ForusARP,McastEndStn,Openflow,Exception,EGRExcption,NflSampled,RpfFailed
+!
+policy-map system-cpp-policy
+ class system-cpp-police-meraki-next-tunnel
+  police rate 750 pps
+!
+interface GigabitEthernet0/0
+ shutdown
+ vrf forwarding Mgmt-vrf
+ port-settings autoneg enable
+exit
+interface TenGigabitEthernet1/0/1
+!
+interface TenGigabitEthernet1/0/2
+!
+interface TenGigabitEthernet1/0/3
+!
+interface TenGigabitEthernet1/0/4
+!
+interface TenGigabitEthernet1/0/5
+!
+interface TenGigabitEthernet1/0/6
+!
+interface TenGigabitEthernet1/0/7
+!
+interface TenGigabitEthernet1/0/8
+!
+interface TenGigabitEthernet1/0/9
+!
+interface TenGigabitEthernet1/0/10
+!
+interface TenGigabitEthernet1/0/11
+!
+interface TenGigabitEthernet1/0/12
+!
+interface TenGigabitEthernet1/0/13
+!
+interface TenGigabitEthernet1/0/14
+!
+interface TenGigabitEthernet1/0/15
+!
+interface TenGigabitEthernet1/0/16
+!
+interface TenGigabitEthernet1/0/17
+!
+interface TenGigabitEthernet1/0/18
+!
+interface TenGigabitEthernet1/0/19
+!
+interface TenGigabitEthernet1/0/20
+!
+interface TenGigabitEthernet1/0/21
+!
+interface TenGigabitEthernet1/0/22
+!
+interface TenGigabitEthernet1/0/23
+!
+interface TenGigabitEthernet1/0/24
+!
+interface TenGigabitEthernet1/0/25
+!
+interface TenGigabitEthernet1/0/26
+!
+interface TenGigabitEthernet1/0/27
+!
+interface TenGigabitEthernet1/0/28
+!
+interface TenGigabitEthernet1/0/29
+!
+interface TenGigabitEthernet1/0/30
+!
+interface TenGigabitEthernet1/0/31
+!
+interface TenGigabitEthernet1/0/32
+!
+interface TenGigabitEthernet1/0/33
+!
+interface TenGigabitEthernet1/0/34
+!
+interface TenGigabitEthernet1/0/35
+!
+interface TenGigabitEthernet1/0/36
+!
+interface TenGigabitEthernet1/0/37
+!
+interface TenGigabitEthernet1/0/38
+!
+interface TenGigabitEthernet1/0/39
+!
+interface TenGigabitEthernet1/0/40
+!
+interface TenGigabitEthernet1/0/41
+!
+interface TenGigabitEthernet1/0/42
+!
+interface TenGigabitEthernet1/0/43
+!
+interface TenGigabitEthernet1/0/44
+!
+interface TenGigabitEthernet1/0/45
+!
+interface TenGigabitEthernet1/0/46
+!
+interface TenGigabitEthernet1/0/47
+!
+interface TenGigabitEthernet1/0/48
+ description UPLINK
+ switchport trunk allowed vlan 311
+ switchport mode trunk
+!
+interface TenGigabitEthernet1/1/1
+!
+interface TenGigabitEthernet1/1/2
+!
+interface TenGigabitEthernet1/1/3
+!
+interface TenGigabitEthernet1/1/4
+!
+interface TenGigabitEthernet1/1/5
+!
+interface TenGigabitEthernet1/1/6
+!
+interface TenGigabitEthernet1/1/7
+!
+interface TenGigabitEthernet1/1/8
+!
+interface TwentyFiveGigE1/1/1
+!
+interface TwentyFiveGigE1/1/2
+!
+interface TwentyFiveGigE1/1/3
+!
+interface TwentyFiveGigE1/1/4
+!
+interface TwentyFiveGigE1/1/5
+!
+interface TwentyFiveGigE1/1/6
+!
+interface TwentyFiveGigE1/1/7
+!
+interface TwentyFiveGigE1/1/8
+!
+interface TwentyFiveGigE1/1/9
+!
+interface TwentyFiveGigE1/1/10
+!
+interface TwentyFiveGigE1/1/11
+!
+interface TwentyFiveGigE1/1/12
+!
+interface TwentyFiveGigE1/1/13
+!
+interface TwentyFiveGigE1/1/14
+!
+interface TwentyFiveGigE1/1/15
+!
+interface TwentyFiveGigE1/1/16
+!
+interface HundredGigE1/1/1
+!
+interface HundredGigE1/1/2
+!
+interface HundredGigE1/1/3
+!
+interface HundredGigE1/1/4
+!
+interface AppGigabitEthernet1/0/1
+ switchport trunk allowed vlan 311
+ switchport mode trunk
+!
+interface AppGigabitEthernet1/0/2
+ switchport mode trunk
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan311
+ ip address 10.85.134.92 255.255.255.192
+!
+interface Vlan999
+ ip address 99.8.8.8 255.255.255.0
+ shutdown
+!
+exit
+no logging queue-limit
+logging host 10.85.134.66 vrf Mgmt-vrf
+aaa new-model
+aaa session-id common
+aaa authentication login default local
+aaa authorization exec default local
+redundancy
+ mode sso
+!
+spanning-tree extend system-id
+spanning-tree mode rapid-pvst
+radius-server cache expiry 24
+crypto engine compliance shield disable
+no crypto ikev2 diagnose error
+no crypto ikev2 http-url cert
+no crypto isakmp diagnose error
+crypto pki trustpoint DNAC-CA
+ enrollment mode ra
+ enrollment terminal
+ hash             sha512
+ revocation-check crl none
+ source interface Vlan311
+ usage            ssl-client
+!
+crypto pki trustpoint SLA-TrustPoint
+ enrollment pkcs12
+ hash             sha256
+ revocation-check crl
+!
+crypto pki trustpoint TP-self-signed-383123434
+ enrollment selfsigned
+ hash             sha256
+ revocation-check none
+ rsakeypair TP-self-signed-383123434
+ subject-name     cn=IOS-Self-Signed-Certificate-383123434
+!
+crypto pki trustpoint sdn-network-infra-iwan
+ auto-enroll 80 regenerate
+ enrollment url http://10.85.134.108:80/ejbca/publicweb/apply/scep/sdnscep
+ fqdn             jcohoe-c9300-2
+ hash             sha512
+ revocation-check crl
+ source interface Vlan311
+ rsakeypair sdn-network-infra-iwan
+ subject-name     CN=C9300-24UX_FOC2237U0A1_sdn-network-infra-iwan
+!
+snmp-server enable traps ike policy add
+snmp-server enable traps ike policy delete
+snmp-server enable traps ike tunnel start
+snmp-server enable traps ike tunnel stop
+snmp-server enable traps local-auth
+snmp-server enable traps auth-framework sec-violation
+snmp-server enable traps bfd
+snmp-server enable traps bridge newroot
+snmp-server enable traps bridge topologychange
+snmp-server enable traps bulkstat collection transfer
+snmp-server enable traps call-home message-send-fail
+snmp-server enable traps call-home server-fail
+snmp-server enable traps cef resource-failure
+snmp-server enable traps cef peer-state-change
+snmp-server enable traps cef peer-fib-state-change
+snmp-server enable traps cef inconsistency
+snmp-server enable traps config
+snmp-server enable traps config-copy
+snmp-server enable traps config-ctid
+snmp-server enable traps cpu threshold
+snmp-server enable traps dhcp
+snmp-server enable traps eigrp
+snmp-server enable traps entity
+snmp-server enable traps entity-diag boot-up-fail
+snmp-server enable traps entity-diag hm-test-recover
+snmp-server enable traps entity-diag hm-thresh-reached
+snmp-server enable traps entity-diag scheduled-test-fail
+snmp-server enable traps entity-perf throughput-notif
+snmp-server enable traps envmon
+snmp-server enable traps errdisable
+snmp-server enable traps event-manager
+snmp-server enable traps flash insertion removal lowspace
+snmp-server enable traps flowmon
+snmp-server enable traps fru-ctrl
+snmp-server enable traps hsrp
+snmp-server enable traps ipmulticast
+snmp-server enable traps ipsec cryptomap add
+snmp-server enable traps ipsec cryptomap attach
+snmp-server enable traps ipsec cryptomap delete
+snmp-server enable traps ipsec cryptomap detach
+snmp-server enable traps ipsec tunnel start
+snmp-server enable traps ipsec tunnel stop
+snmp-server enable traps ipsec too-many-sas
+snmp-server enable traps ipsla
+snmp-server enable traps isis
+snmp-server enable traps lisp
+snmp-server enable traps mac-notification change move threshold
+snmp-server enable traps memory bufferpeak
+snmp-server enable traps mpls traffic-eng
+snmp-server enable traps mpls fast-reroute protected
+snmp-server enable traps mpls rfc ldp
+snmp-server enable traps mpls rfc traffic-eng
+snmp-server enable traps mpls ldp
+snmp-server enable traps mpls vpn
+snmp-server enable traps msdp
+snmp-server enable traps mvpn
+snmp-server enable traps pim invalid-pim-message
+snmp-server enable traps pim neighbor-change
+snmp-server enable traps pim rp-mapping-change
+snmp-server enable traps port-security
+snmp-server enable traps power-ethernet police
+snmp-server enable traps pw vc
+snmp-server enable traps rep
+snmp-server enable traps rf
+snmp-server enable traps smart-license
+snmp-server enable traps snmp authentication coldstart linkdown linkup warmstart
+snmp-server enable traps stackwise
+snmp-server enable traps stpx inconsistency root-inconsistency loop-inconsistency
+snmp-server enable traps syslog
+snmp-server enable traps transceiver all
+snmp-server enable traps tty
+snmp-server enable traps udld link-fail-rpt status-change
+snmp-server enable traps vlancreate
+snmp-server enable traps vlandelete
+snmp-server enable traps vlan-membership
+snmp-server enable traps vrfmib vrf-up
+snmp-server enable traps vrfmib vrf-down
+snmp-server enable traps vrfmib vnet-trunk-up
+snmp-server enable traps vrfmib vnet-trunk-down
+snmp-server enable traps vtp
+snmp-server enable traps bgp cbgp2 state-changes all backward-trans limited updown-limited
+snmp-server enable traps bgp cbgp2 threshold prefix
+snmp-server enable traps nhrp nhc down
+snmp-server enable traps nhrp nhc up
+snmp-server enable traps nhrp nhp down
+snmp-server enable traps nhrp nhp up
+snmp-server enable traps nhrp nhs down
+snmp-server enable traps nhrp nhs up
+snmp-server enable traps nhrp quota-exceeded
+snmp-server enable traps ospf state-change
+snmp-server enable traps ospf errors
+snmp-server enable traps ospf retransmit
+snmp-server enable traps ospf lsa
+snmp-server enable traps ospf cisco-specific state-change nssa-trans-change
+snmp-server enable traps ospf cisco-specific state-change shamlink interface
+snmp-server enable traps ospf cisco-specific state-change shamlink neighbor
+snmp-server enable traps ospf cisco-specific errors
+snmp-server enable traps ospf cisco-specific retransmit
+snmp-server enable traps ospf cisco-specific lsa
+snmp-server enable traps ospfv3 state-change
+snmp-server enable traps ospfv3 errors
+snmp-server trap-source GigabitEthernet0/0
+snmp-server community RW rw
+snmp-server host 10.85.134.108 vrf Mgmt-vrf version 2c RW
+line con 0
+ exec-timeout 0
+ stopbits 1
+!
+line vty 0 4
+ exec-timeout 0
+ length 0
+ transport input all
+!
+line vty 5 15
+ exec-timeout 0
+ transport input all
+!
+line vty 16 31
+ transport input ssh
+!
+ntp server 10.81.254.202
+event manager applet catchall
+ event cli pattern .* sync no skip no
+ action 1 syslog msg $_cli_msg
+ exit
+!
+no process cpu extended history
+diagnostic bootup level minimal
+!switch 1 provision c9300x-48hx
+ </clis>
+ <operation>full-replace</operation>
+  <do-commit>false</do-commit>
+</config-ios-cli-trans>
